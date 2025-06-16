@@ -8,6 +8,7 @@ flask = "3.0.3"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 sqlalchemy-serializer = "*"
+flask-restful = "*"
 
 [requires]
 python_full_version = "3.8.10"
