@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm import validates
 
 db = SQLAlchemy()
 
@@ -10,8 +11,16 @@ class User(db.Model, SerializerMixin):
     first_name = db.Column(db.String)
     middle_name = db.Column(db.String)
     last_name = db.Column(db.String)
-    username = db.Column(db.String, unique=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String, unique=True)
+    password = db.Column(db.String)
     posts = db.relationship('Post', back_populates='user')
+
+    @validates('email')
+    def validate_email(self, key, value):
+        if "@" not in value:
+            raise ValueError("Email must have '@' character to be valid")
+        return value
 
     
 

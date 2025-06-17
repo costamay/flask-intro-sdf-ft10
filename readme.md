@@ -100,3 +100,17 @@ blueprints
 
 <!-- flask restful api -->
 classes
+
+<!-- constraints & validation -->
+db.CheckConstraint()
+contraints => this affect the columns
+example => email => @, unique
+            username => unique and of a given length
+
+<!-- validation -->
+doing a check to ensure data is valid
+
+exception handlers
+try:
+
+except

@@ -21,7 +21,7 @@ def posts():
 
         return make_response(new_post.to_dict(), 201)
 
-@post_pb.route('/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
+@post_pb.route('/posts/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
 def get_post_by_id(id):
     post = db.get_or_404(Post, id)
 

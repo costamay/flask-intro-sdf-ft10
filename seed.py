@@ -5,9 +5,9 @@ with app.app_context():
 
     print("Seeding users...")
 
-    christina = User(first_name="Christina", last_name="Max", middle_name="Mary", username="chris")
-    nevil = User(first_name="Nevil", last_name="Brandon", middle_name="Lence", username="brandy")
-    alice = User(first_name="Alice", last_name="Chelsea", middle_name="Migan", username="rihanna")
+    christina = User(first_name="Christina", last_name="Max", middle_name="Mary", username="chris", email="chris@gmail.com", password="1234")
+    nevil = User(first_name="Nevil", last_name="Brandon", middle_name="Lence", username="brandy", email="brandy@gmail.com", password="1234")
+    alice = User(first_name="Alice", last_name="Chelsea", middle_name="Migan", username="rihanna", email="rihanna@gmail.com", password="1234")
 
     db.session.add_all([christina, nevil, alice])
     db.session.commit()
