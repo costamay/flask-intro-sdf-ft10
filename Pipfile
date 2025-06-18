@@ -9,6 +9,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 sqlalchemy-serializer = "*"
 flask-restful = "*"
+flask-cors = "*"
 
 [requires]
 python_full_version = "3.8.10"

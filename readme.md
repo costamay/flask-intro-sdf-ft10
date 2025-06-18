@@ -114,3 +114,22 @@ exception handlers
 try:
 
 except
+
+adding react app to our application
+
+<!-- authentication & authorization -->
+authentication => identity, are youu the person caliming to be
+authorization => do you have permission to perform some operation
+
+<!-- passwords -->
+encrypt => hash
+banana-mangoe-orange => Juice 
+        irreversable <= Juice
+banana-mango-orange => possible
+
+<!-- login credentials -->
+correct password and username => loged in
+
+<!-- sessions -->
+JWT=JSON WEB TOKEN
+flask-jwt-extended => token
