@@ -5,12 +5,14 @@ from blueprints.posts import post_pb
 from blueprints.users import user_bp
 from flask_restful import Api, Resource
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required
 
 # create the app
 app = Flask(__name__)
 
 # configure the SQLite database, relative to the app instance folder
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///school.db'
+app.config['JWT_SECRET_KEY'] = '38e4274bfe7d72d49777d732'
 
 migrate = Migrate(app, db)
 
@@ -18,6 +20,7 @@ migrate = Migrate(app, db)
 db.init_app(app)
 api = Api(app)
 CORS(app)
+jwt = JWTManager(app)
 
 # registering blueprint
 # app.register_blueprint(user_bp, url_prefix='/api/v1')
@@ -31,7 +34,57 @@ def not_found(e):
 def not_found(e):
     return make_response({"error" : "Method not allowed"}, 405)
 
+class RegisterUser(Resource):
+    def post(self):
+        data = request.get_json()
+
+        user = User.get_user_by_username(username=data.get('username'))
+
+        if user is not None:
+            return make_response({'error' : "Username already in use"})
+
+        new_user = User(first_name=data.get('first_name'), middle_name=data.get('middle_name'), last_name=data.get('last_name'), username=data.get('username'), email=data.get('email'))
+        new_user.set_password(data.get('password'))
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return make_response(
+            {'messaga' : 'User created successfully'}, 201
+        )
+
+
+
+
+class LoginUser(Resource):
+    def post(self):
+        data = request.get_json()
+
+        user = User.get_user_by_username(username=data.get('username'))
+
+        if user and (user.check_password(password=data.get('password'))):
+            access_token = create_access_token(identity=user.username)
+            refresh_token = create_refresh_token(identity=user.username)
+
+            return make_response(
+                {
+                    'message': "Login successful",
+                    'token' : {
+                        'access' : access_token,
+                        'refresh' : refresh_token
+                    }
+                }
+            )
+
+        return make_response(
+            {'error' : "Invalid username or password"}, 403
+        )
+
+class LogoutUser(Resource):
+    pass
+
 class PostEndpoint(Resource):
+    @jwt_required()
     def get(self):
         posts = [post.to_dict() for post in Post.query.all()]
         return make_response(posts, 200)
@@ -45,6 +98,7 @@ class PostEndpoint(Resource):
         return make_response(new_post.to_dict(), 201)
 
 class PostEndpointById(Resource):
+    @jwt_required()
     def get(self, id):
         # post = db.get_or_404(Post, id)
         post = Post.query.filter(Post.id == id).first()
@@ -78,6 +132,8 @@ class PostEndpointById(Resource):
 
 api.add_resource(PostEndpoint, '/posts')
 api.add_resource(PostEndpointById, '/posts/<int:id>')
+api.add_resource(RegisterUser, '/register')
+api.add_resource(LoginUser, '/login')
 
     
 if __name__ == '__main__':

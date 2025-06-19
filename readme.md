@@ -133,3 +133,6 @@ correct password and username => loged in
 <!-- sessions -->
 JWT=JSON WEB TOKEN
 flask-jwt-extended => token
+
+http => stateless
+get, post, patch, delete => this operations are stateless
