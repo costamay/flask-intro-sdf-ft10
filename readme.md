@@ -136,3 +136,11 @@ flask-jwt-extended => token
 
 http => stateless
 get, post, patch, delete => this operations are stateless
+
+<!-- logout our users -->
+revoking the access token and refresh token
+
+<!-- jwt error handlers -->
+invalid token
+missing token
+expired
